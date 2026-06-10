@@ -2,21 +2,28 @@ import Link from "next/link";
 import { pipelines, repositories } from "@/lib/mockData";
 import styles from "@/styles/pages.module.css";
 
-// The [id] folder name tells Next.js to pass the URL param dynamically
 export default async function RepositoryPage({ params }) {
-  // Await params in Next.js 15+
   const { id } = await params;
 
   const repo = repositories.find((r) => r.id === id);
   const repoPipelines = pipelines.filter((p) => p.repoId === id);
 
+  // Helper function to show the right emoji
+  const getStatusIcon = (status) => {
+    if (status === "Failed") return "❌";
+    if (status === "Success") return "✅";
+    if (status === "Running") return "🟡";
+    return "❓";
+  };
+
   return (
     <div className={styles.container}>
-      {/* Breadcrumb back navigation */}
-      <Link href="/dashboard">← Back to Dashboard</Link>
+      <Link href="/dashboard" style={{ color: "#888", textDecoration: "none" }}>
+        ← Back to Dashboard
+      </Link>
 
       <h2>Repository: {repo?.name || "Unknown"}</h2>
-      <h3>Failed Pipelines</h3>
+      <h3 style={{ marginTop: "1rem" }}>Recent Pipelines</h3>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
         {repoPipelines.map((pipeline) => (
@@ -25,11 +32,22 @@ export default async function RepositoryPage({ params }) {
             key={pipeline.id}
             className={styles.card}
           >
-            <h4>Pipeline #{pipeline.id}</h4>
-            <p>
-              Branch: {pipeline.branch} | Status: 🔴 {pipeline.status} |{" "}
-              {pipeline.time}
-            </p>
+            <h4 style={{ margin: "0 0 0.5rem 0" }}>
+              {getStatusIcon(pipeline.status)} Pipeline #{pipeline.id}
+            </h4>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                color: "#a6accd",
+                fontSize: "0.9rem",
+              }}
+            >
+              <span>
+                Branch: <strong>{pipeline.branch}</strong>
+              </span>
+              <span>{pipeline.time}</span>
+            </div>
           </Link>
         ))}
       </div>
