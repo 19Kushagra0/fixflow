@@ -29,3 +29,21 @@ export const pipelineLogs = {
     '101': `[08:00:00] Running build...
 [08:01:00] Build successful!`
 };
+// Mock AI Analysis Results
+export const mockAnalyses = {
+    '104': {
+        rootCause: 'DATABASE_URL environment variable is not configured.',
+        impact: 'Database initialization fails. Users cannot access data.',
+        severity: 'High'
+    },
+    '103': {
+        rootCause: 'Import path references a file that cannot be found (@/components/Navbar).',
+        impact: 'Application build cannot complete.',
+        severity: 'Medium'
+    },
+    '102': {
+        rootCause: 'Application is accessing a value before it exists.',
+        impact: 'Runtime crash.',
+        severity: 'High'
+    }
+};
