@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { pipelines, pipelineLogs } from "@/lib/mockData";
 import styles from "@/styles/pages.module.css";
+import LogViewer from "@/components/LogViewer"; // Import our new component
 
 export default async function PipelinePage({ params }) {
   const { id } = await params;
 
-  // Find the exact pipeline to get branch, time, and trigger info
   const pipeline = pipelines.find((p) => p.id === id);
   const logs = pipelineLogs[id] || "No logs available for this pipeline.";
 
@@ -24,7 +24,6 @@ export default async function PipelinePage({ params }) {
 
       <h2>Pipeline #{pipeline.id}</h2>
 
-      {/* Detailed Info Card */}
       <div
         className={styles.card}
         style={{ backgroundColor: "#1e1e2e", border: "1px solid #313244" }}
@@ -44,13 +43,11 @@ export default async function PipelinePage({ params }) {
         </p>
       </div>
 
-      <div style={{ marginTop: "1rem" }}>
-        <h3>Logs</h3>
-        <div className={styles.logBox}>{logs}</div>
-      </div>
+      {/* Here is our new interactive component! */}
+      <LogViewer logs={logs} />
 
-      {/* The Analyze button stays, to preserve our flow for the next steps! */}
-      <div style={{ marginTop: "1rem" }}>
+      {/* Kept this so our flow stays intact for Step 5! */}
+      <div style={{ marginTop: "2rem" }}>
         <Link href={`/analysis/${id}`} className={styles.primaryButton}>
           Analyze Failure
         </Link>
